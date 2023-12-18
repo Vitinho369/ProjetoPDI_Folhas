@@ -12,18 +12,21 @@ import visao.ImageShow;
 import java.util.Arrays;
 import static java.lang.Double.POSITIVE_INFINITY;
 
-public class Processor {
+public class Processor2 {
 
 	public List<Entity> process(File file) {
 		ImageShow imageShow = new ImageShow();
+
+		double percentIpe;
+		double percentPauBrasil;
+		double percentXanana;
+		double percentRoseira;
+		String classification;
 		
 		ArrayList<Entity> list = new ArrayList<>();
 		int[][][] im = ImageReader.imRead(file.getPath());
 		//Image.imWrite(im, "C:/Users/vitin/Documents/TADS/PDI/ProjetoPDI/Results/original.png");
 
-		ArrayList<String> classifications = new ArrayList<String>(); 
-		ArrayList<Double> areas = new ArrayList<Double>(); 
-		
 		double areaMaior = Double.NEGATIVE_INFINITY, areaMenor = Double.POSITIVE_INFINITY;
 		im = ImaJ._imResize(im);
 		//int [][][] imResized = im;
@@ -87,90 +90,42 @@ public class Processor {
 								}
 							}
 						}
-						ImageReader.imWrite(im2, file.getPath().split("\\.")[0] + "_" + i + ".png");
+//						percentIpe = 187965/(double) sementes.get(i).area ;
+//						percentPauBrasil = 11520/(double)sementes.get(i).area;
+//						percentXanana = 20918/(double)sementes.get(i).area;
+//						percentRoseira = 158004/(double)sementes.get(i).area;
+
+						percentIpe = Math.sqrt(Math.pow((187965-sementes.get(i).area),2));
+						percentPauBrasil = Math.sqrt(Math.pow((11520-sementes.get(i).area),2));
+						percentXanana = Math.sqrt(Math.pow((20918-sementes.get(i).area),2));
+						percentRoseira = Math.sqrt(Math.pow((158004-sementes.get(i).area),2));
+						classification = "desconhecido";
+						
+						if(percentIpe < percentPauBrasil && percentIpe < percentXanana && percentIpe < percentRoseira)
+							classification = "Ipe";
+						if (percentPauBrasil < percentIpe && percentPauBrasil < percentXanana && percentPauBrasil < percentRoseira)
+							classification = "Pau Brasil";
+						if (percentXanana < percentPauBrasil && percentXanana < percentIpe && percentXanana < percentRoseira)
+							classification = "Xanana";
+						if (percentRoseira < percentPauBrasil && percentRoseira < percentIpe && percentRoseira < percentXanana)
+							classification = "Roseira";
+//						if(percentIpe < 1.3) {
+//							System.out.println(percentIpe);
+//							if(percentIpe > percentPauBrasil && percentIpe > percentXanana && percentIpe > percentRoseira)
+//								classification = "Ipe";
+//						}
+//						
+//						if(percentXanana < 1.3) {
+//							System.out.println(percentIpe);
+//							if(percentXanana > percentPauBrasil && percentXanana > percentRoseira)
+//								classification = "Xanana";
+//						}
+						ImageReader.imWrite(im2, file.getPath().split("\\.")[0] + "_" + classification + ".png");
 						//ImageReader.imWrite(im2,"C:/Users/vitin/Documents/TADS/PDI/ProjetoPDI/Results/folha_" + i + ".png");
-						list.add(new Entity(sementes.get(i).area, 1, file.getPath().split("\\.")[0] + "_" + i + ".png", "desconhecido ainda"));			
+						list.add(new Entity(sementes.get(i).area, percentIpe, percentXanana, percentPauBrasil, percentRoseira, file.getPath().split("\\.")[0] + "_" + classification + ".png", classification));			
 						}
-				
 			}	
 		
-		for(int i = 0; i < list.size(); i++) {
-				if(list.get(i).getArea() > areaMaior) {
-					areaMaior = sementes.get(i).area;
-						if(classifications.contains("Ipe")) {
-							int index = classifications.indexOf("Ipe");
-							classifications.set(index,"desconhecido ainda");
-							areas.set(index, 0.0);
-						}
-						
-						classifications.add("Ipe");
-						areas.add(areaMaior);
-				}
-				
-				if(list.get(i).getArea() < areaMenor) {
-					areaMenor = list.get(i).getArea();
-						if(classifications.contains("Pau Brasil")) {
-							int index = classifications.indexOf("Pau Brasil");
-							classifications.set(index,"desconhecido ainda");
-							areas.set(index, 0.0);
-						}
-						
-						classifications.add("Pau Brasil");
-						areas.add(areaMenor);
-			}
-//				System.out.println(list.get(i).getArea());
-		}
-		
-		
-//		System.out.println(classifications.toString());
-//		System.out.println(areas.toString());
-		for(int i = 0; i < list.size(); i++) {
-			for(int j=0; j < areas.size();j++) {
-				if(list.get(i).getArea() == areas.get(j)) {
-					list.get(i).setClassification(classifications.get(j));
-				}
-			}
-		}
-		areaMaior = Double.NEGATIVE_INFINITY;
-		areaMenor = Double.POSITIVE_INFINITY;
-		
-		for(int i = 0; i < list.size(); i++) {
-			if(list.get(i).getClassification().equals("desconhecido ainda")) {
-				
-				if(list.get(i).getArea() > areaMaior) {
-					areaMaior = sementes.get(i).area;
-						if(classifications.contains("Roseira")) {
-							int index = classifications.indexOf("Roseira");
-							classifications.set(index,"desconhecido ainda");
-							areas.set(index, 0.0);
-						}
-						
-						classifications.add("Roseira");
-						areas.add(areaMaior);
-				}
-				
-				if(list.get(i).getArea() < areaMenor) {
-					areaMenor = list.get(i).getArea();
-						if(classifications.contains("Xanana")) {
-							int index = classifications.indexOf("Xanana");
-							classifications.set(index,"desconhecido ainda");
-							areas.set(index, 0.0);
-						}
-						
-						classifications.add("Xanana");
-						areas.add(areaMenor);
-				}
-				
-			}
-		}
-		
-		for(int i = 0; i < list.size(); i++) {
-			for(int j=0; j < areas.size();j++) {
-				if(list.get(i).getArea() == areas.get(j)) {
-					list.get(i).setClassification(classifications.get(j));
-				}
-			}
-		}
 		return list;
 	}
 }
