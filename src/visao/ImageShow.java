@@ -51,7 +51,7 @@ public class ImageShow {
 
     public void imShow(File file) {
         Stage modalStage = new Stage();
-        modalStage.initModality(Modality.APPLICATION_MODAL);
+//        modalStage.initModality(Modality.APPLICATION_MODAL);
         modalStage.setTitle("ImageShow");
 
         ImageView fullImageView = new ImageView(new Image(file.toURI().toString()));
@@ -111,7 +111,7 @@ public class ImageShow {
     
     public void imShow(File file, String nameScreen) {
         Stage modalStage = new Stage();
-        modalStage.initModality(Modality.APPLICATION_MODAL);
+//        modalStage.initModality(Modality.APPLICATION_MODAL);
         modalStage.setTitle(nameScreen);
 
         ImageView fullImageView = new ImageView(new Image(file.toURI().toString()));

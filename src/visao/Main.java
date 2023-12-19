@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dominio.Entity;
-import dominio.Processor2;
+import dominio.Processor3;
 
 public class Main extends Application {
     private static final String CONFIG_FILE_PATH = "config.txt";
@@ -82,7 +82,7 @@ public class Main extends Application {
     private void process() {
     	processButton.setDisable(true);
         
-        	Processor2 processor = new Processor2();
+        	Processor3 processor = new Processor3();
             ArrayList<Entity> entities = new ArrayList<>();
             if (selectedFiles != null) {
                 for (File file : selectedFiles) {
@@ -98,17 +98,17 @@ public class Main extends Application {
             
             if(entities.size() > 0) {
             	openDataTableView(entities); 
-            	for(int i=0; i < entities.size();i++) {
-            		if(entities.get(i).getClassification().equals("Ipe"))
-            			areaIpe += entities.get(i).getArea();
-            		else if (entities.get(i).getClassification().equals("Pau Brasil"))
-            			areaPauBrasil += entities.get(i).getArea();
-            		else if(entities.get(i).getClassification().equals("Xanana"))
-            			areaXanana += entities.get(i).getArea();
-            		else if(entities.get(i).getClassification().equals("Roseira"))
-            			areaRoseira += entities.get(i).getArea();
-            			
-            	}
+//            	for(int i=0; i < entities.size();i++) {
+//            		if(entities.get(i).getClassification().equals("Ipe"))
+//            			areaIpe += entities.get(i).getArea();
+//            		else if (entities.get(i).getClassification().equals("Pau Brasil"))
+//            			areaPauBrasil += entities.get(i).getArea();
+//            		else if(entities.get(i).getClassification().equals("Xanana"))
+//            			areaXanana += entities.get(i).getArea();
+//            		else if(entities.get(i).getClassification().equals("Roseira"))
+//            			areaRoseira += entities.get(i).getArea();
+//            			
+//            	}
             	
 //            	System.out.println("AreaIpe = "+areaIpe);
 //            	System.out.println("AreaPauBrasil = "+areaPauBrasil);
